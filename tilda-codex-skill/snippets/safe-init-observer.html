@@ -1,0 +1,47 @@
+<script>
+(function () {
+  'use strict';
+
+  var ROOT_SELECTOR = '#rec123456'; // Замените на ID вашего блока.
+  var ITEM_SELECTOR = '.example-item'; // Примерный селектор: замените под конкретный блок.
+
+  function enhance(root) {
+    var items = root.querySelectorAll(ITEM_SELECTOR);
+
+    items.forEach(function (item) {
+      if (item.dataset.codexEnhanced === '1') return;
+      item.dataset.codexEnhanced = '1';
+
+      // Ваш код модификации элемента.
+      item.classList.add('codex-enhanced');
+    });
+  }
+
+  function init() {
+    var root = document.querySelector(ROOT_SELECTOR);
+    if (!root) return;
+
+    enhance(root);
+
+    if (root.dataset.codexObserverReady === '1') return;
+    root.dataset.codexObserverReady = '1';
+
+    var observer = new MutationObserver(function () {
+      enhance(root);
+    });
+
+    observer.observe(root, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+  window.addEventListener('load', init, { once: true });
+})();
+</script>
+

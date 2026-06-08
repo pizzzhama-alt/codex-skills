@@ -1,0 +1,44 @@
+<script>
+(function () {
+  'use strict';
+
+  var ROOT_SELECTOR = '#rec123456'; // Замените на ID блока с формой.
+  var FORM_SELECTOR = 'form'; // При необходимости сузьте селектор формы.
+  var MESSAGE_TEXT = 'Спасибо! Мы получили заявку и скоро свяжемся с вами.';
+
+  function enhanceForms(root) {
+    root.querySelectorAll(FORM_SELECTOR).forEach(function (form) {
+      if (form.dataset.codexFormReady === '1') return;
+      form.dataset.codexFormReady = '1';
+
+      form.addEventListener('submit', function () {
+        window.setTimeout(function () {
+          if (form.querySelector('[data-tilda-codex-success]')) return;
+
+          var message = document.createElement('div');
+          message.setAttribute('data-tilda-codex-success', '1');
+          message.textContent = MESSAGE_TEXT;
+          message.style.marginTop = '12px';
+          message.style.fontSize = '14px';
+          message.style.lineHeight = '1.4';
+
+          form.appendChild(message);
+        }, 300);
+      });
+    });
+  }
+
+  function init() {
+    var root = document.querySelector(ROOT_SELECTOR);
+    if (!root) return;
+    enhanceForms(root);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+

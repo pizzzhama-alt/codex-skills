@@ -1,0 +1,65 @@
+<style>
+  /* Замените #rec123456 на ID блока каталога */
+  #rec123456 [data-tilda-codex-badge] {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    z-index: 3;
+    padding: 6px 10px;
+    border-radius: 4px;
+    background: #111;
+    color: #fff;
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 600;
+    pointer-events: none;
+  }
+
+  /* Примерный селектор карточки: проверьте класс в вашем блоке каталога */
+  #rec123456 .t-store__card {
+    position: relative;
+  }
+</style>
+
+<script>
+(function () {
+  'use strict';
+
+  var ROOT_SELECTOR = '#rec123456'; // ID блока каталога.
+  var CARD_SELECTOR = '.t-store__card'; // Примерный селектор: замените после проверки HTML.
+  var BADGE_TEXT = 'Хит';
+
+  function addBadges(root) {
+    root.querySelectorAll(CARD_SELECTOR).forEach(function (card) {
+      if (card.querySelector('[data-tilda-codex-badge]')) return;
+
+      var badge = document.createElement('div');
+      badge.setAttribute('data-tilda-codex-badge', '1');
+      badge.textContent = BADGE_TEXT;
+      card.appendChild(badge);
+    });
+  }
+
+  function init() {
+    var root = document.querySelector(ROOT_SELECTOR);
+    if (!root) return;
+
+    addBadges(root);
+
+    if (root.dataset.codexBadgeObserver === '1') return;
+    root.dataset.codexBadgeObserver = '1';
+
+    new MutationObserver(function () {
+      addBadges(root);
+    }).observe(root, { childList: true, subtree: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+  window.addEventListener('load', init, { once: true });
+})();
+</script>
+

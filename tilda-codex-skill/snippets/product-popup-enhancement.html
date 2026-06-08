@@ -1,0 +1,51 @@
+<script>
+(function () {
+  'use strict';
+
+  var POPUP_SELECTOR = '.example-product-popup'; // Примерный селектор: замените на селектор попапа товара.
+  var TARGET_SELECTOR = '.example-popup-title'; // Примерный селектор места вставки.
+
+  function enhancePopup(popup) {
+    if (!popup || popup.dataset.codexPopupReady === '1') return;
+
+    var target = popup.querySelector(TARGET_SELECTOR);
+    if (!target) return;
+
+    popup.dataset.codexPopupReady = '1';
+
+    if (popup.querySelector('[data-tilda-codex-popup-note]')) return;
+
+    var note = document.createElement('div');
+    note.setAttribute('data-tilda-codex-popup-note', '1');
+    note.textContent = 'Доставка 1-3 дня';
+    note.style.marginTop = '10px';
+    note.style.fontSize = '14px';
+    note.style.lineHeight = '1.4';
+
+    target.insertAdjacentElement('afterend', note);
+  }
+
+  function scan() {
+    document.querySelectorAll(POPUP_SELECTOR).forEach(enhancePopup);
+  }
+
+  function init() {
+    scan();
+    if (document.body.dataset.codexPopupObserver === '1') return;
+    document.body.dataset.codexPopupObserver = '1';
+
+    new MutationObserver(scan).observe(document.body, {
+      childList: true,
+      subtree: true
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+  window.addEventListener('load', init, { once: true });
+})();
+</script>
+

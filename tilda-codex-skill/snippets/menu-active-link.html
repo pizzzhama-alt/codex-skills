@@ -1,0 +1,42 @@
+<script>
+(function () {
+  'use strict';
+
+  var MENU_SELECTOR = '#rec123456'; // Замените на ID блока меню.
+  var LINK_SELECTOR = 'a[href]';
+  var ACTIVE_CLASS = 'codex-active-link';
+
+  function normalize(url) {
+    return url.replace(/\/$/, '');
+  }
+
+  function init() {
+    var menu = document.querySelector(MENU_SELECTOR);
+    if (!menu) return;
+
+    var current = normalize(window.location.origin + window.location.pathname);
+
+    menu.querySelectorAll(LINK_SELECTOR).forEach(function (link) {
+      var href = link.href ? normalize(link.href.split('#')[0]) : '';
+      if (href === current) {
+        link.classList.add(ACTIVE_CLASS);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init, { once: true });
+  } else {
+    init();
+  }
+})();
+</script>
+
+<style>
+  /* Замените #rec123456 на ID блока меню */
+  #rec123456 .codex-active-link {
+    color: #111;
+    font-weight: 700;
+  }
+</style>
+
