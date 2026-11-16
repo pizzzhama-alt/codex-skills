@@ -1,9 +1,9 @@
 ---
-name: figma-layer-classes
+name: figma-local-layout
 description: Use when implementing or reviewing local HTML/JSX blocks, components, or websites from Figma and exact transfer of layer names to CSS classes matters.
 ---
 
-# Figma Layer Classes
+# Figma Local Layout
 
 Use Figma layer names as the source of truth for class names. Preserve each name exactly from the Figma layer to the HTML `class` or JSX `className` value and corresponding CSS selector.
 
