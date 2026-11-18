@@ -15,6 +15,14 @@ Use Figma layer names as the source of truth for class names. Preserve each name
 4. **Implement and audit.** Limit the audit and fixes to the requested implementation and its styles; report pre-existing external dependencies separately. Check HTML `class`, JSX `className`, and classes created by in-scope scripts against the inventory. Check CSS class selectors against classes used by the implementation, including known conditional states. Repair mismatches using the Figma name; never make a Figma layer conform to an existing code name without explicit user direction.
 5. **Report.** Briefly report material omissions, mismatches, blockers, and unverified values in the response. Do not create audit files, JSON inventories, or other auxiliary reports unless the user explicitly requests them. Create files needed for the layout itself as required by the task. Keep working inventories in memory or tool context.
 
+## Raster image optimization
+
+Before connecting a Figma raster asset to a local layout, prepare an optimized derivative unless the user explicitly requests the original. Preserve the exact image, composition, crop, transparency, layer order and visual fidelity; do not redraw or merge assets. Keep source files unchanged. Do not convert SVGs, animated images, or API-supplied dynamic images automatically. The user explicitly requested this optimization as part of this skill; preserve the Figma design-to-code workflow for downloading and verifying assets.
+
+Determine the largest rendered slot across the relevant layouts, account for display pixel density (normally 2×), and avoid upscaling. For raster assets use `node <skill-directory>/scripts/optimize-image.cjs INPUT OUTPUT.webp --width PIXELS` from a project with `sharp` installed (`npm install --save-dev sharp`); set `WEBP_QUALITY` to an integer from 1 to 100 (default 80). The tool preserves alpha and refuses to overwrite an existing output. If the image tool is unavailable, install the dependency only when appropriate to the project, or use an existing equivalent; report any unoptimized assets if conversion cannot be completed. Use responsive variants where the displayed sizes warrant them, and lazy-load below-the-fold imagery when appropriate.
+
+Compare the result at actual rendered sizes, including fine text, transparency, cropping and layered images; adjust dimensions or quality until visually faithful. Verify every referenced optimized asset exists and report total source and output sizes. Preserve the original if compression cannot achieve acceptable quality. Never claim this verification succeeded when the result could not be inspected.
+
 ## Auto Layout: transfer and verification
 
 Perform this workflow every time the skill is used, for every Auto Layout container and its children in scope, including nested containers. It supplements the class audit; it does not authorize extra classes or Figma changes.
